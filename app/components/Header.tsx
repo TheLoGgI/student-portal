@@ -46,7 +46,7 @@ export default function Header({ currentUser }: { currentUser: Student }) {
             <input type="checkbox" id="dropdown" className="hidden" />
             <div className="controlled-dropdown">
               <div className="dropdown-content flex flex-col">
-                <NavLink to={`/profil/${currentUser._id}`}>Profile</NavLink>
+                <NavLink to={`/${currentUser._id}/profil`}>Profile</NavLink>
                 <NavLink to={`/settings/${currentUser._id}/profil`}>
                   Edit profil
                 </NavLink>

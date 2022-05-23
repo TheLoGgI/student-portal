@@ -12,12 +12,14 @@ type AvatarPickerProps = {
 const AvatarPicker = ({ user, avatars }: AvatarPickerProps) => {
   return (
     <div>
-      <Avatar
-        size={200}
-        src={user.avatar.image}
-        color={user.avatar.color}
-        name={user.fullname}
-      />
+      <div className="w-32">
+        <Avatar
+          size={200}
+          src={user.avatar.image}
+          color={user.avatar.color}
+          name={user.fullname}
+        />
+      </div>
       <p className="text-xl my-4 mb-8 font-bold">Pick a new avatar:</p>
 
       <div className="grid grid-cols-3 justify-items-center gap-2">

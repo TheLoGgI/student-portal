@@ -27,12 +27,17 @@ export const action: ActionFunction = async ({ request, params }) => {
         profilUser[interestsName].indexOf(user._id),
         1
       )
+
+      user.connections.splice(user.connections.indexOf(profilUser._id), 1)
       await profilUser.save()
+      await user.save()
       return null
     }
     profilUser[interestsName].push(user._id)
+    user.connections.push(profilUser._id)
 
     await profilUser.save()
+    await user.save()
   } catch (error) {
     console.log("error: ", error)
     return null
@@ -57,6 +62,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (profilUser === null)
     throw new Response("Sorry, no user found with that id", {
       status: 404,
+      statusText: "Sorry, no user found with that id",
     })
 
   const interestsName = user.isCorporation ? "recruters" : "network"
@@ -174,7 +180,7 @@ export function CatchBoundary() {
   return (
     <main className="mx-auto max-w-screen-xl flex justify-center items-center h-screen">
       <div className="mx-auto">
-        <h1 className="text-3xl text-center mb-20">{caught.data}</h1>
+        <h1 className="text-3xl text-center mb-20">{caught.statusText}</h1>
         <div>
           <NotFound />
         </div>

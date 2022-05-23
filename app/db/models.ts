@@ -59,6 +59,7 @@ const users = new Schema(
     },
     recruters: [{ type: Schema.Types.ObjectId, ref: "User" }],
     network: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    connections: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 )

@@ -1,36 +1,29 @@
-import { Link, Outlet } from "@remix-run/react"
-// import connectDb from "~/db/connectDb.server.js"
-
-// export async function loader() {
-//   const db = await connectDb()
-//   const books = await db.models.Book.find()
-//   return books
-// }
+import { Link } from "@remix-run/react"
 
 export default function Index() {
-  const books = []
-
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Remix + Mongoose</h1>
-      <h2 className="text-lg font-bold mb-3">
-        Here are a few of my favorite books:
-      </h2>
-      <ul className="ml-5 list-disc">
-        {books.map((book) => {
-          return (
-            <li key={book._id}>
-              <Link
-                to={`/books/${book._id}`}
-                className="text-blue-600 hover:underline"
-              >
-                {book.title}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
-      <Outlet />
-    </div>
+    <main className="max-w-screen-xl mx-auto">
+      <div className="grid grid-cols-6">
+        <div className="col-start-1 col-end-4 row-start-1 gap-4 relative z-10">
+          <h1 className="text-6xl font-bold mt-10 text-blue-600">
+            Find the best students and internes for your company
+          </h1>
+          <p className="text-lg mt-4 max-w-sm mb-20">
+            Search for students with a specialty or filter them by experience
+            level
+          </p>
+          <Link to="/login" className="bg-blue-400 px-6 py-4 rounded-sm">
+            Login to find your students
+          </Link>
+        </div>
+        <div className="col-span-4 col-end-7 row-start-1 gap-4">
+          <img
+            className="transform -scale-x-100"
+            src="/assets/images/mimi-thian.jpg"
+            alt="Students"
+          />
+        </div>
+      </div>
+    </main>
   )
 }
