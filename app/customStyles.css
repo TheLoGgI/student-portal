@@ -1,0 +1,27 @@
+.controlled-dropdown {
+  padding: 1rem;
+  position: absolute;
+  z-index: -1;
+  top: -5rem;
+  right: 0;
+  width: 15rem;
+  background-color: aquamarine;
+  transition: transform 0.3s ease-in-out;
+}
+
+#dropdown:checked ~ .controlled-dropdown {
+  transform: translateY(calc(2rem + 100%));
+  /* z-index: 1; */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .controlled-dropdown {
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+  }
+
+  #dropdown:checked ~ .controlled-dropdown {
+    transform: translateY(calc(2rem + 100%));
+    opacity: 1;
+  }
+}
