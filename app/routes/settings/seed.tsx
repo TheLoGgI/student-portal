@@ -19,8 +19,20 @@ async function createRandomUser() {
       image: generateAvatars(1)[0],
       color: randomColor(),
     },
+    requters: [],
+    network: [],
+    connections: [],
+    socials: {
+      github: `https://github.com/${fullname.replace(" ", "-")}`,
+      linkedin: `https://www.linkedin.com/in/${fullname.replace(" ", "-")}/`,
+      website: faker.internet.url(),
+    },
     password: await bcrypt.hash("randomuser", 10),
     email: faker.internet.email(fullname),
+    createdAt: faker.date.between(
+      "2018-01-01T00:00:00.000Z",
+      "2022-01-01T00:00:00.000Z"
+    ),
     isProfileComplete: true,
   }
 }

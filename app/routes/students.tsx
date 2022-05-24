@@ -154,7 +154,7 @@ export default function Students() {
   return (
     <main className="mx-auto p-4 max-w-screen-xl">
       <StudentsFilter submit={submit} />
-      <div className="grid grid-cols-auto gap-y-8 gap-x-12 justify-items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-4 justify-items-center">
         {students.map((student) => (
           <StudentsCard key={student._id} student={student} />
         ))}
