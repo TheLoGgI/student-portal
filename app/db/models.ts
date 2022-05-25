@@ -64,6 +64,22 @@ const users = new Schema(
   { timestamps: true }
 )
 
+const messaging = new Schema(
+  {
+    from: { type: Schema.Types.ObjectId, ref: "User" },
+    to: { type: Schema.Types.ObjectId, ref: "User" },
+    messages: [
+      {
+        from: { type: Schema.Types.ObjectId, ref: "User" },
+        to: { type: Schema.Types.ObjectId, ref: "User" },
+        message: String,
+        date: Date,
+      },
+    ],
+  },
+  { timestamps: true }
+)
+
 export const models = [
   {
     name: "Users",
@@ -74,5 +90,10 @@ export const models = [
     name: "Seed",
     schema: users,
     collection: "seedUsers",
+  },
+  {
+    name: "Messaging",
+    schema: messaging,
+    collection: "messaging",
   },
 ]
