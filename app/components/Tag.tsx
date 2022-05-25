@@ -5,7 +5,7 @@ type TagProps = {
 }
 
 const Tag = ({ tag }: TagProps) => (
-  <Link to={`.?tag=${tag}`} key={tag} className="capitalize underline">
+  <Link to={`/students?tags=${tag}`} key={tag} className="capitalize underline">
     {tag}
   </Link>
 )

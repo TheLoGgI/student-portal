@@ -13,4 +13,18 @@ export type ProfilLoaderData = {
 export type UserProfilLoaderData = {
   profilUser: Student
   isInterested: boolean
+  url: string
+  connections: {
+    network: Student[]
+    recruiters: Student[]
+  }
+}
+
+export type DrawerProps = {
+  isActive: boolean
+  students: {
+    network: Student[]
+    recruiters: Student[]
+  }
+  connectionsType: string | null
 }

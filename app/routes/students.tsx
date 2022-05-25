@@ -98,10 +98,13 @@ function StudentsFilter({ submit, initial }: StudentFilterProps) {
           Search
         </button>
       </Form>
-      <Form method="get" onChange={handleChange}>
+      <Form method="get" onChange={handleChange} className="flex my-2 gap-4">
         <div className="flex flex-col">
-          <label htmlFor="tags">Skills</label>
+          <label htmlFor="tags">Tags</label>
           <select name="tags" id="tags" className="p-2 bg-gray-100 rounded-sm">
+            <option selected value="">
+              No tag
+            </option>
             <optgroup label="Skills">
               <option value="problem-solving">Problem solving</option>
               <option value="creative">Creative</option>
@@ -142,6 +145,12 @@ function StudentsFilter({ submit, initial }: StudentFilterProps) {
             </optgroup>
           </select>
         </div>
+        <button
+          type="submit"
+          className="self-end bg-fuchsia-400 px-6 py-2 rounded-sm"
+        >
+          Filter tag
+        </button>
       </Form>
     </header>
   )

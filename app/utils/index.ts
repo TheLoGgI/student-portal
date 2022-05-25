@@ -25,4 +25,10 @@ export const randomColor = (): string => {
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
-// export default { generateAvatars }
+export const getFormatedDate = (date: string): string => {
+  const options = {
+    dateStyle: "long",
+  } as Intl.DateTimeFormatOptions
+
+  return new Date(date).toLocaleDateString("da-DK", options)
+}
