@@ -24,7 +24,6 @@ const LinkStyles =
 export const action: ActionFunction = async ({ request, params }) => {
   const db = await connectDb()
   const form = await request.formData()
-  console.log("form: ", form)
 
   const session = await requireUserSession(request)
   const authUid = session.get("auth")
@@ -162,10 +161,8 @@ const Modal = ({ isActive }: { isActive: boolean }) => {
 
 export default function ProfilSettings() {
   const user = useOutletContext<Student>()
-  console.log("user: ", user)
   const { url, avatars } = useLoaderData<ProfilLoaderData>()
   const fetcher = useFetcher()
-  console.log("fetcher: ", fetcher.data)
   const update = new URL(url).searchParams.get("update")
 
   return (

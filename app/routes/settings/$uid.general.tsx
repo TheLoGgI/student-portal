@@ -28,7 +28,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const session = await requireUserSession(request)
   const authUid = session.get("auth")
-  // console.log("authUid: ", authUid)
 
   try {
     switch (form.get("type")) {

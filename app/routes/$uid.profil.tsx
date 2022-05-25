@@ -11,7 +11,7 @@ import { getSession } from "~/server/session"
 import type { DrawerProps, UserProfilLoaderData } from "~/types/loaders"
 import { getFormatedDate } from "~/utils"
 
-import { Student } from "./students"
+import type { Student } from "./students"
 
 export const action: ActionFunction = async ({ request, params }) => {
   const db = await connectDb()
@@ -27,13 +27,29 @@ export const action: ActionFunction = async ({ request, params }) => {
     const interestsName = user.isCorporation ? "recruters" : "network"
 
     const isInterested = profilUser[interestsName].includes(user._id)
+    // const isInterested = user.connections.includes(profilUser._id)
     if (isInterested) {
       profilUser[interestsName].splice(
         profilUser[interestsName].indexOf(user._id),
         1
       )
 
-      user.connections.splice(user.connections.indexOf(profilUser._id), 1)
+      // TODO: make delete, after added.
+      // TODO: ERROR Bouderyes
+      user.connections.splice(
+        user.connections.indexOf(profilUser._id.toString()),
+        1
+      )
+      // user.connections = user.connections.reduce(
+      //   (acc: string[], item: string) => {
+      //     if (item !== profilUser._id) {
+      //       acc.push(item)
+      //     }
+      //     return acc
+      //   },
+      //   []
+      // )
+
       await profilUser.save()
       await user.save()
       return null
@@ -64,12 +80,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const profilUid = params.uid
   const user = await db.models.Users.findById(authUid)
   const profilUser = await db.models.Users.findById(profilUid)
-  const networkConnections = await db.models.Users.find({
-    _id: { $in: profilUser.network },
-  })
-  const requtiersConnections = await db.models.Users.find({
-    _id: { $in: profilUser.requiters },
-  })
+  const networkConnections = await db.models.Users.find(
+    {
+      _id: { $in: profilUser.network },
+    },
+    {
+      password: 0,
+    }
+  )
+  const requtiersConnections = await db.models.Users.find(
+    {
+      _id: { $in: profilUser.requiters },
+    },
+    {
+      password: 0,
+    }
+  )
 
   if (profilUser === null)
     throw new Response("Sorry, no user found with that id", {
@@ -110,10 +136,14 @@ function Drawer({ isActive, students, connectionsType }: DrawerProps) {
           </Link>
         </div>
       </div>
-      <div>
-        {connection.map((student) => (
-          <UserListItem key={student._id} student={student} />
-        ))}
+      <div className="flex flex-col gap-3">
+        {connection.length !== 0 ? (
+          connection.map((student) => (
+            <UserListItem key={student._id} student={student} />
+          ))
+        ) : (
+          <p>No connections in your {connectionsType}</p>
+        )}
       </div>
     </aside>
   )

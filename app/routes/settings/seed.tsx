@@ -45,7 +45,6 @@ export const action: ActionFunction = async () => {
   // for (let i = 0; i < 50; i++) {
   //   seedUsers.push(await createRandomUser())
   // }
-  // console.log("seedUsers: ", seedUsers)
 
   try {
     // await db.models.Seed.deleteMany()

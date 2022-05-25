@@ -66,12 +66,11 @@ const users = new Schema(
 
 const messaging = new Schema(
   {
-    from: { type: Schema.Types.ObjectId, ref: "User" },
-    to: { type: Schema.Types.ObjectId, ref: "User" },
+    speakerOne: { type: Schema.Types.ObjectId, ref: "User" },
+    speakerTwo: { type: Schema.Types.ObjectId, ref: "User" },
     messages: [
       {
         from: { type: Schema.Types.ObjectId, ref: "User" },
-        to: { type: Schema.Types.ObjectId, ref: "User" },
         message: String,
         date: Date,
       },

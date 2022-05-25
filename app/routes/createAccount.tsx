@@ -65,7 +65,6 @@ const formGroup = "flex flex-col mb-4"
 
 export default function CreateAccount() {
   const actionData = useActionData()
-  console.log("actionData: ", actionData)
   const [error, setError] = useState(actionData)
 
   const emptyFields = error?.type === "emptyFields"

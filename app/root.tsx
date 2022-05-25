@@ -39,35 +39,38 @@ export function meta() {
   }
 }
 
-// export const loader: LoaderFunction = async ({ request }) => {
-//   const db = await connectDb()
-//   const session = await requireUserSession(request)
-//   console.log("session: ", session)
-//   const authUid = session.get("auth")
-//   console.log("authUid: ", authUid)
-//   const students = await db.models.Users.findOne({ _id: authUid })
-//   console.log("students: ", students)
-//   return students
-// }
-
 export const loader: LoaderFunction = async ({ request }) => {
   const db = await connectDb()
   const session = await requireUserSession(request)
-  const students = await db.models.Users.find({}, { password: 0 })
+  console.log("session: ", session)
+
+  if (!session.has("auth")) return { user: undefined }
 
   const authUid = session.get("auth")
-  const user = students.find((student) => student._id.toString() === authUid)
-  students.filter((student) => student._id.toString() !== authUid)
+  const user = await db.models.Users.findOne({ _id: authUid }, { password: 0 })
 
-  return { students, user }
+  // const user = students.find((student) => student._id.toString() === authUid)
+  // students.filter((student) => student._id.toString() !== authUid)
+
+  return { user: user ?? undefined }
 }
 
 export default function App() {
   const { user } = useLoaderData<{
-    students: Student[]
     user: Student
   }>()
 
+  return (
+    <Layout>
+      <Header currentUser={user} />
+      <div className="bg-orange-300 h-screen w-screen">
+        <Outlet />
+      </div>
+    </Layout>
+  )
+}
+
+function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -75,12 +78,24 @@ export default function App() {
         <Links />
       </head>
       <body className="h-screen">
-        <Header currentUser={user} />
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
+  )
+}
+
+export function ErrorBoundary(error: Error) {
+  // console.log("error: ", error)
+  return (
+    <Layout>
+      <div className="bg-orange-300 h-screen w-screen">
+        {/* <Header currentUser={user} /> */}
+
+        <Outlet />
+      </div>
+    </Layout>
   )
 }

@@ -19,6 +19,7 @@ const NavLink = ({
 )
 
 export default function Header({ currentUser }: { currentUser: Student }) {
+  console.log("currentUser: ", currentUser)
   return (
     <header className="w-full shadow-md h-20 flex justify-between relative z-20 bg-white">
       <Link to="/">
@@ -33,7 +34,7 @@ export default function Header({ currentUser }: { currentUser: Student }) {
       <nav className="flex justify-end items-center gap-4 bg-white">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/students">Students</NavLink>
-        {/* <NavLink to="/recruiters">Recruiters</NavLink> */}
+        <NavLink to="/messages">Messages</NavLink>
         {currentUser !== undefined ? (
           <div className="bg-purple-100 h-full p-4 flex items-center gap-4">
             <label htmlFor="dropdown" className="cursor-pointer">

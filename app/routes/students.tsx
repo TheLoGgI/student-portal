@@ -37,7 +37,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
   const search = url.searchParams.get("search") || ""
   const sort = url.searchParams.get("sort") || ""
-  console.log("sort: ", sort)
   const tag = url.searchParams.get("tag") || ""
 
   const students = await db.models.Users.find({

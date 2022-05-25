@@ -1,7 +1,7 @@
 import { json } from "@remix-run/node"
 
 export default function (error: Error | unknown) {
-  console.log("error: ", error)
+  console.warn("error: ", error)
   // @ts-ignore
   if (error.code === 11000)
     return json({
