@@ -28,3 +28,20 @@ export type DrawerProps = {
   }
   connectionsType: string | null
 }
+
+export type MessagingType = {
+  speakerOne: string
+  speakerTwo: string
+  messages: {
+    _id: string
+    from: string
+    message: string
+    date: string
+  }[]
+}
+
+export type MessageLoaderProps = {
+  connections: Student[]
+  user: Student
+  conversation: MessagingType
+}

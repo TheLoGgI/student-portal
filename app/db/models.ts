@@ -29,7 +29,7 @@ const users = new Schema(
       },
       color: {
         type: String,
-        default: "D8B4FE",
+        default: "#D8B4FE",
       },
     },
     password: {
@@ -57,7 +57,7 @@ const users = new Schema(
       github: String,
       website: String,
     },
-    recruters: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    // recruters: [{ type: Schema.Types.ObjectId, ref: "User" }],
     network: [{ type: Schema.Types.ObjectId, ref: "User" }],
     connections: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },

@@ -44,6 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 }
 
+// TODO: keep state after submit, if fields not valied.
 const formGroup = "flex flex-col mb-4"
 
 export default function Login() {

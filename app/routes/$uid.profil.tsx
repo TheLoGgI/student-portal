@@ -1,9 +1,9 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { redirect } from "@remix-run/node"
-import { Form, Link, useCatch, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData } from "@remix-run/react"
 import Avatar from "~/components/Avatar"
 import Exit from "~/components/Exit"
-import NotFound from "~/components/NotFound"
+import CatchBoundary from "~/components/NotFoundCatchBoundary"
 import Tag from "~/components/Tag"
 import UserListItem from "~/components/UserListItem"
 import connectDb from "~/db/connectDb.server"
@@ -24,37 +24,21 @@ export const action: ActionFunction = async ({ request, params }) => {
     const user = await db.models.Users.findById(authUid)
     const profilUser = await db.models.Users.findById(profilUid)
 
-    const interestsName = user.isCorporation ? "recruters" : "network"
+    const isInterested = profilUser.network.includes(user._id)
 
-    const isInterested = profilUser[interestsName].includes(user._id)
-    // const isInterested = user.connections.includes(profilUser._id)
     if (isInterested) {
-      profilUser[interestsName].splice(
-        profilUser[interestsName].indexOf(user._id),
-        1
-      )
+      profilUser.network.splice(profilUser.network.indexOf(user._id), 1)
 
-      // TODO: make delete, after added.
-      // TODO: ERROR Bouderyes
       user.connections.splice(
         user.connections.indexOf(profilUser._id.toString()),
         1
       )
-      // user.connections = user.connections.reduce(
-      //   (acc: string[], item: string) => {
-      //     if (item !== profilUser._id) {
-      //       acc.push(item)
-      //     }
-      //     return acc
-      //   },
-      //   []
-      // )
 
       await profilUser.save()
       await user.save()
       return null
     }
-    profilUser[interestsName].push(user._id)
+    profilUser.network.push(user._id)
     user.connections.push(profilUser._id)
 
     await profilUser.save()
@@ -88,14 +72,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       password: 0,
     }
   )
-  const requtiersConnections = await db.models.Users.find(
-    {
-      _id: { $in: profilUser.requiters },
-    },
-    {
-      password: 0,
-    }
-  )
+  // const requtiersConnections = await db.models.Users.find(
+  //   {
+  //     _id: { $in: profilUser.requiters },
+  //   },
+  //   {
+  //     password: 0,
+  //   }
+  // )
 
   if (profilUser === null)
     throw new Response("Sorry, no user found with that id", {
@@ -103,8 +87,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       statusText: "Sorry, no user found with that id",
     })
 
-  const interestsName = user.isCorporation ? "recruters" : "network"
-  const isInterested = profilUser[interestsName].includes(user._id)
+  // const interestsName = user.isCorporation ? "recruters" : "network"
+  // const isInterested = profilUser[interestsName].includes(user._id)
+  const isInterested = profilUser.network.includes(user._id)
 
   const profilData = await db.models.Users.findOne(
     { _id: profilUid },
@@ -116,8 +101,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     isInterested,
     url: request.url,
     connections: {
-      recruiters: requtiersConnections,
-      network: networkConnections,
+      recruiters: networkConnections.filter((x) => x.isCorporation),
+      network: networkConnections.filter((x) => x.isCorporation === false),
     },
   }
 }
@@ -127,7 +112,7 @@ function Drawer({ isActive, students, connectionsType }: DrawerProps) {
   const connection: Array<Student> = (students as any)[connectionsType]
 
   return (
-    <aside className="w-96 absolute top-0 right-0 h-screen p-4 bg-gray-100 z-50 border-2 border-gray-300">
+    <aside className="w-96 absolute top-0 right-0 h-screen p-4 bg-gray-100 z-50 border-2 border-gray-300 overflow-y-scroll">
       <div className="flex justify-between">
         <h2 className="text-xl mb-4 capitalize">{connectionsType}</h2>
         <div>
@@ -167,7 +152,7 @@ export default function UserProfil() {
       <main className="w-full">
         <div className="container max-w-screen-xl mx-auto p-8 bg-gray-100 ">
           <div className="flex text-xl gap-5 justify-around flex-wrap items-center">
-            <div className="w-25 h-25">
+            <div className="w-24 h-24">
               <Avatar
                 src={profilUser.avatar.image}
                 name={profilUser.fullname}
@@ -202,7 +187,7 @@ export default function UserProfil() {
                 >
                   Recruiters
                 </Link>
-                <p>{profilUser.recruters.length}</p>
+                <p>{connections.recruiters.length}</p>
               </div>
               <div className="flex flex-col gap-2">
                 <Link
@@ -211,7 +196,7 @@ export default function UserProfil() {
                 >
                   Network
                 </Link>
-                <p>{profilUser.network.length}</p>
+                <p>{connections.network.length}</p>
               </div>
             </div>
 
@@ -267,16 +252,4 @@ export default function UserProfil() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-  return (
-    <main className="mx-auto max-w-screen-xl flex justify-center items-center h-screen">
-      <div className="mx-auto">
-        <h1 className="text-3xl text-center mb-20">{caught.statusText}</h1>
-        <div>
-          <NotFound />
-        </div>
-      </div>
-    </main>
-  )
-}
+export { CatchBoundary }

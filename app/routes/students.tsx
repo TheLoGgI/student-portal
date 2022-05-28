@@ -23,7 +23,6 @@ export type Student = {
     github: string
     website: string
   }
-  recruters: string[]
   network: string[]
   connections: string[]
   createdAt: string

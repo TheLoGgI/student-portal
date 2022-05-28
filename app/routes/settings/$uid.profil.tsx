@@ -61,6 +61,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         const linkedin = form.get("linkedin") as string
         const github = form.get("github") as string
         const website = form.get("website") as string
+        console.log("github: ", github)
 
         const linkedinMatch = linkedin.match(
           /^https:\/\/www.linkedin.com\/in\//
@@ -69,7 +70,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
         if (linkedin !== "" && linkedinMatch === null)
           throw new Error("linkedinInvalid")
-        if (github !== "" && githubMatch === null) throw new Error("unverified")
+        if (github !== "" && githubMatch === null)
+          throw new Error("githubInvalid")
 
         user.socials = {
           linkedin,
@@ -312,6 +314,11 @@ export default function ProfilSettings() {
                   placeholder="https://www.linkedin.com/..."
                 />
               </div>
+              {fetcher.data?.type === "linkedinInvalid" && (
+                <small id="passwordHelp" className="text-red-600">
+                  {fetcher.data?.msg}
+                </small>
+              )}
               <div className={formGroup}>
                 <label htmlFor="linkedin">Github</label>
                 <input
@@ -327,8 +334,7 @@ export default function ProfilSettings() {
                   id="github"
                   placeholder="https://www.github.com/..."
                 />
-                {(fetcher.data?.type === "invalidemail" ||
-                  fetcher.data?.type === "emailExists") && (
+                {fetcher.data?.type === "githubInvalid" && (
                   <small id="passwordHelp" className="text-red-600">
                     {fetcher.data?.msg}
                   </small>

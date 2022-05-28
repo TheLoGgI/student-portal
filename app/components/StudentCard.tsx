@@ -17,7 +17,7 @@ const StudentsCard = ({ student }: StudetnCardProps) => {
   return (
     <div className="bg-gray-200 p-4 shadow-solid sm:w-80 max-w-sm overflow-hidden">
       <div className="flex text-xl gap-5">
-        <div className="w-25 h-25">
+        <div className="w-24 h-24">
           <Avatar
             src={student.avatar.image}
             name={student.fullname}
@@ -33,7 +33,7 @@ const StudentsCard = ({ student }: StudetnCardProps) => {
             <h3 className="capitalize">{student.fullname}</h3>
           </Link>
           <p className="text-base">{creadedAt}</p>
-          <div className="flex gap-2 text-sm">
+          <div className="flex flex-wrap gap-2 text-sm">
             {student.tags.map((tag: string) => (
               <Tag tag={tag} key={tag} />
             ))}

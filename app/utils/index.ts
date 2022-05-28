@@ -32,3 +32,8 @@ export const getFormatedDate = (date: string): string => {
 
   return new Date(date).toLocaleDateString("da-DK", options)
 }
+
+// https://bobbyhadz.com/blog/javascript-get-hours-and-minutes-from-date
+export function padTo2Digits(num: number): string {
+  return String(num).padStart(2, "0")
+}

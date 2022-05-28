@@ -40,15 +40,21 @@ export const action: ActionFunction = async ({ request, params }) => {
         })
 
         await db.models.Users.updateMany(
+          // {
+          //   $or: [
+          //     { recruters: { $in: [authUid] } },
+          //     { network: { $in: [authUid] } },
+          //   ],
+          // },
           {
-            $or: [
-              { recruters: { $in: [authUid] } },
-              { network: { $in: [authUid] } },
-            ],
+            network: { $in: [authUid] },
           },
           {
-            $pull: { $and: [{ network: authUid }, { recruters: authUid }] },
+            $pull: { network: authUid },
           }
+          // {
+          //   $pull: { $and: [{ network: authUid }, { recruters: authUid }] },
+          // }
         )
 
         if (!doc) throw new Error("networkError")

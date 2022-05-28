@@ -18,7 +18,6 @@ const Avatar = ({
       width={size}
       height={size}
       alt={`Avatar ${name}`}
-      className="min-w-min"
     />
   </div>
 )

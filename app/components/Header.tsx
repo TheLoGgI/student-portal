@@ -19,7 +19,6 @@ const NavLink = ({
 )
 
 export default function Header({ currentUser }: { currentUser: Student }) {
-  console.log("currentUser: ", currentUser)
   return (
     <header className="w-full shadow-md h-20 flex justify-between relative z-20 bg-white">
       <Link to="/">
@@ -41,7 +40,8 @@ export default function Header({ currentUser }: { currentUser: Student }) {
               <Avatar
                 src={currentUser.avatar.image}
                 color={currentUser.avatar.color}
-                name="John Doe"
+                size={60}
+                name={currentUser.fullname}
               />
             </label>
             <input type="checkbox" id="dropdown" className="hidden" />

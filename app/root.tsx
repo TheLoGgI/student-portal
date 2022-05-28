@@ -49,9 +49,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const authUid = session.get("auth")
   const user = await db.models.Users.findOne({ _id: authUid }, { password: 0 })
 
-  // const user = students.find((student) => student._id.toString() === authUid)
-  // students.filter((student) => student._id.toString() !== authUid)
-
   return { user: user ?? undefined }
 }
 
@@ -63,14 +60,14 @@ export default function App() {
   return (
     <Layout>
       <Header currentUser={user} />
-      <div className="bg-orange-300 h-screen w-screen">
-        <Outlet />
-      </div>
+      {/* <div className="bg-orange-300 h-screen w-screen"> */}
+      <Outlet />
+      {/* </div> */}
     </Layout>
   )
 }
 
-function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
