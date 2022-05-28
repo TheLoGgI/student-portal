@@ -6,6 +6,7 @@ import {
   useFetcher,
   useLoaderData,
   useOutletContext,
+  useTransition,
 } from "@remix-run/react"
 import Avatar from "~/components/Avatar"
 import AvatarPicker from "~/components/AvatarPicker"
@@ -61,7 +62,6 @@ export const action: ActionFunction = async ({ request, params }) => {
         const linkedin = form.get("linkedin") as string
         const github = form.get("github") as string
         const website = form.get("website") as string
-        console.log("github: ", github)
 
         const linkedinMatch = linkedin.match(
           /^https:\/\/www.linkedin.com\/in\//
@@ -166,6 +166,7 @@ export default function ProfilSettings() {
   const { url, avatars } = useLoaderData<ProfilLoaderData>()
   const fetcher = useFetcher()
   const update = new URL(url).searchParams.get("update")
+  const transition = useTransition()
 
   return (
     <>

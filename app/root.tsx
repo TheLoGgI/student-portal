@@ -42,7 +42,6 @@ export function meta() {
 export const loader: LoaderFunction = async ({ request }) => {
   const db = await connectDb()
   const session = await requireUserSession(request)
-  console.log("session: ", session)
 
   if (!session.has("auth")) return { user: undefined }
 
@@ -84,15 +83,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function ErrorBoundary(error: Error) {
-  // console.log("error: ", error)
+export function ErrorBoundary() {
   return (
     <Layout>
-      <div className="bg-orange-300 h-screen w-screen">
-        {/* <Header currentUser={user} /> */}
-
-        <Outlet />
-      </div>
+      <Outlet />
     </Layout>
   )
 }

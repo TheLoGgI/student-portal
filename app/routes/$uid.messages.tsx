@@ -1,6 +1,6 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { redirect } from "@remix-run/node"
-import { Form, Link, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react"
 import Avatar from "~/components/Avatar"
 import NotFound from "~/components/NotFound"
 import CatchBoundary from "~/components/NotFoundCatchBoundary"
@@ -9,6 +9,7 @@ import connectDb from "~/db/connectDb.server"
 import { getSession } from "~/server/session"
 import type { MessageLoaderProps } from "~/types/loaders"
 import { padTo2Digits } from "~/utils"
+import { useEffect, useRef } from "react"
 
 import type { Student } from "./students"
 
@@ -73,7 +74,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSession(cookie)
   const authUid = session.get("auth")
   const conversationPartnerUid = params.uid
-  console.log("conversationPartnerUid: ", conversationPartnerUid)
 
   if (!session.has("auth")) {
     throw redirect("/login")
@@ -124,7 +124,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       },
     ],
   })
-  console.log("conversation: ", conversation)
 
   // if (conversation === null)
   //   throw new Response("Sorry, you have no conversations with this person", {
@@ -196,23 +195,16 @@ function Messages() {
   const { connections, user, conversation } =
     useLoaderData<MessageLoaderProps>()
 
-  // const formRef = useRef()
+  const transition = useTransition()
+  const formRef = useRef<HTMLFormElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // useEffect(() => {
-  //   console.log("formRef: ", formRef)
-  //   // formRef.current.focus()
-  // }, [formRef])
+  const isAdding = transition.state === "submitting"
 
-  // const message = {
-  //   sender: {
-  //     fullname: "John Doe",
-  //     avatar: {
-  //       image: connections[0].avatar.image,
-  //       color: connections[0].avatar.color,
-  //     },
-  //   },
-  //   timeSent: "12:00",
-  // }
+  useEffect(() => {
+    inputRef.current?.focus()
+    if (!isAdding) formRef.current?.reset()
+  }, [isAdding])
 
   return (
     <main className="max-w-screen-xl mx-auto my-4 max-h-screen relative">
@@ -240,7 +232,6 @@ function Messages() {
               const from = connections.find(
                 (person) => person._id === message.from
               )
-              console.log("from: ", from)
               return (
                 <MessageCard
                   key={message._id}
@@ -254,19 +245,21 @@ function Messages() {
       <Form
         method="post"
         className="flex gap-2 absolute -bottom-12 right-0"
-        // ref={formRef}
+        ref={formRef}
       >
         <input
           type="text"
           required
+          ref={inputRef}
           name="message"
           id="message"
           className="p-1 mt-1 rounded-sm border-2 border-gray-300 w-screen max-w-screen-sm "
         />
         <input
           type="submit"
-          value="Message"
-          className="bg-green-300 px-6 py-2 rounded-sm"
+          value={isAdding ? "Adding.." : "Message"}
+          disabled={isAdding}
+          className="bg-green-300 px-6 py-2 rounded-sm disabled:opacity-50"
         />
       </Form>
     </main>

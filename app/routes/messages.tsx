@@ -4,13 +4,11 @@ import CatchBoundary from "~/components/NotFoundCatchBoundary"
 import connectDb from "~/db/connectDb.server"
 import { getSession } from "~/server/session"
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const db = await connectDb()
   const cookie = request.headers.get("Cookie")
   const session = await getSession(cookie)
   const authUid = session.get("auth")
-  const conversationPartnerUid = params.uid
-  console.log("conversationPartnerUid: ", conversationPartnerUid)
 
   if (!session.has("auth")) {
     throw redirect("/login")

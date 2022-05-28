@@ -112,7 +112,6 @@ export const action: ActionFunction = async ({ request, params }) => {
       }
     }
   } catch (error) {
-    console.log("error: ", error)
     return handleErrorCodes(error)
   }
 }

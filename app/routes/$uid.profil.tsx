@@ -1,6 +1,6 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { redirect } from "@remix-run/node"
-import { Form, Link, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react"
 import Avatar from "~/components/Avatar"
 import Exit from "~/components/Exit"
 import CatchBoundary from "~/components/NotFoundCatchBoundary"
@@ -44,8 +44,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     await profilUser.save()
     await user.save()
   } catch (error) {
-    console.log("error: ", error)
-    return null
+    return { error }
   }
 
   return null
@@ -72,14 +71,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       password: 0,
     }
   )
-  // const requtiersConnections = await db.models.Users.find(
-  //   {
-  //     _id: { $in: profilUser.requiters },
-  //   },
-  //   {
-  //     password: 0,
-  //   }
-  // )
 
   if (profilUser === null)
     throw new Response("Sorry, no user found with that id", {
@@ -87,8 +78,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       statusText: "Sorry, no user found with that id",
     })
 
-  // const interestsName = user.isCorporation ? "recruters" : "network"
-  // const isInterested = profilUser[interestsName].includes(user._id)
   const isInterested = profilUser.network.includes(user._id)
 
   const profilData = await db.models.Users.findOne(
@@ -138,8 +127,9 @@ export default function UserProfil() {
   const { profilUser, isInterested, connections, url } =
     useLoaderData<UserProfilLoaderData>()
   const createdAt = getFormatedDate(profilUser.createdAt)
-
+  const transition = useTransition()
   const drawer = new URL(url).searchParams.get("drawer")
+  const busy = transition.state === "submitting"
 
   return (
     <>
@@ -204,9 +194,14 @@ export default function UserProfil() {
               <button
                 type="submit"
                 name="instrested"
-                className="bg-fuchsia-400 w-full px-6 py-2 rounded-sm"
+                disabled={busy}
+                className="bg-fuchsia-400 w-full px-6 py-2 rounded-sm disabled:opacity-50"
               >
-                {isInterested ? "Uninterested" : "Interested"}
+                {busy
+                  ? "Pending..."
+                  : isInterested
+                  ? "Uninterested"
+                  : "Interested"}
               </button>
             </Form>
           </div>

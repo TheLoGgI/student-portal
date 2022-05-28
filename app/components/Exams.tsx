@@ -4,7 +4,7 @@ const Exams = () => (
     width="596.88227"
     height="400.00144"
     viewBox="0 0 596.88227 400.00144"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
   >
     <g>
       <path
