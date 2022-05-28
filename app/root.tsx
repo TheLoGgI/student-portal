@@ -59,9 +59,7 @@ export default function App() {
   return (
     <Layout>
       <Header currentUser={user} />
-      {/* <div className="bg-orange-300 h-screen w-screen"> */}
       <Outlet />
-      {/* </div> */}
     </Layout>
   )
 }
