@@ -88,7 +88,7 @@ function StudentsFilter({ students, initial }: StudentFilterProps) {
               type="search"
               name="search"
               defaultValue={initial?.search}
-              placeholder="Search names & tags..."
+              placeholder="Search names..."
             />
           </div>
 
@@ -99,7 +99,7 @@ function StudentsFilter({ students, initial }: StudentFilterProps) {
               className="p-2 bg-gray-100 rounded-sm"
               defaultValue={initial?.sort}
             >
-              <option value="fullname">name</option>
+              <option value="fullname">Alphabetically</option>
               <option value="updatedAt">Last updated</option>
               <option value="createdAt">Date added</option>
             </select>
